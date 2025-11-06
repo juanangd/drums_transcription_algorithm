@@ -1,6 +1,4 @@
 # Drum Transcription algorithm 
-FORK
-The current algorithm can try to write out midi notes wiht anegative time to the file. And the dependency management is wrong, so i've fixed that
 
 ## Requirements
 * Python 3.7
