@@ -29,7 +29,7 @@ def train(pre_process_dataset_path):
 @click.argument('input_audio_file')
 @click.argument('output_midi_file')
 def predict(input_audio_file, output_midi_file):
-    click.echo('The audio ' + input_audio_file + "will be transcribed to " + output_midi_file)
+    click.echo('The audio ' + input_audio_file + " will be transcribed to " + output_midi_file)
     predict_transcription(input_audio_file, output_midi_file)
 
 cli.add_command(pre_process_dataset)

@@ -79,7 +79,9 @@ def predict_transcription(input_audio_file, output_midi_file):
                notes.append(GROOVE_PITCH_POST_PROCESS[id][0])
 
         predictions.append([onset/settings.sampling_frequency, [*notes]])
-
+    
+    print("just before post processing")
+    print(predictions)
     convert_midi(output_midi_file, predictions, bpm)
 
 
@@ -93,6 +95,9 @@ def convert_midi(midi_file, predictions, bpm):
     :return:
     """
     predictions = np.array(predictions)
+    print("predictions")
+    print(predictions.shape)
+    print(predictions)
 
     times = predictions[:, 0]
     notes = predictions[:, 1]
@@ -105,10 +110,14 @@ def convert_midi(midi_file, predictions, bpm):
     track.append(md.MetaMessage('set_tempo', tempo=tempo, time=0))
     track.append(md.Message('program_change', program=12, time=0))
 
-    default_length_sec = md.tick2second(tpb / 8, tpb, tempo=tempo)
+    default_length_sec = md.tick2second(tpb / 8, tpb, tempo=tempo) # 1/8 note length drum hit
 
     events_unsorted = np.zeros((len(predictions) + 2, len(times) * 2))
+    print("events_unsorted")
+    print(events_unsorted.shape)
     for i, t in enumerate(times):
+        if t < 0:
+            continue
         events_unsorted[0, 2 * i] = t  # timing note_on
         events_unsorted[0, 2 * i + 1] = t + default_length_sec  # timing note_off
         events_unsorted[1, 2 * i:2 * i + 2] = (1 if len(notes[i]) else 0)  # note exists
@@ -128,17 +137,18 @@ def convert_midi(midi_file, predictions, bpm):
         if events_sorted[1, i]:
             for n in notes[int(events_sorted[2, i])]:
                 # note_on
-                if events_sorted[3, i] == 1:
-                    track.append(md.Message('note_on', note=n, time=int(ticks)))
-                # note_off
-                else:
-                    track.append(md.Message('note_off', note=n, time=int(ticks)))
+                if ticks >= 0:
+                    if events_sorted[3, i] == 1:
+                        track.append(md.Message('note_on', note=n, time=int(ticks)))
+                    # note_off
+                    else:
+                        track.append(md.Message('note_off', note=n, time=int(ticks)))
                 ticks = 0
             jumped = 0
         else:
             jumped += 1
 
-    if not midi_file.endswith('.mid') or not midi_file.endswith('.midi'):
+    if not (midi_file.endswith('.mid') or midi_file.endswith('.midi')):
         midi_file += '.mid'
     midi.save(midi_file)
     return midi

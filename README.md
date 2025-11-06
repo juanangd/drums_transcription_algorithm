@@ -1,4 +1,6 @@
 # Drum Transcription algorithm 
+FORK
+The current algorithm can try to write out midi notes wiht anegative time to the file. And the dependency management is wrong, so i've fixed that
 
 ## Requirements
 * Python 3.7
@@ -16,7 +18,24 @@ The basic usage of poetry for is also well documented on here.
 
 [https://python-poetry.org/docs/basic-usage/](https://python-poetry.org/docs/basic-usage/)
 
-To install our depencies, simply run:
+
+Also, this is mentioned in the poetry docs, but i must restate, DO NOT install poetry in the same environment that you're using for this project
+
+NOTE, poetry install does not setup your python environment for you, so you must do it yourself. I recommend Anaconda
+
+```
+conda create --name drums python=3.7
+```
+
+and 
+
+```
+conda activate drums
+```
+
+
+
+To install our dependencies, simply run:
 
 ```
 poetry install
@@ -42,7 +61,7 @@ In our case, we extracted eight tracks from the whole GROOVE Dataset before trai
 
 The training could be done executing the following command where `PRE_PROCESS_DATASET_PATH` is the folder containing the pre-processed data. This function doesn't only run the training part of the model but also it shuffles the data, it splits the dataset into training and validation and feed the data to the algorigthm.  
 ```
-poetry run python cli.py poetry run python cli.py train PRE_PROCESS_DATASET_PATH
+poetry run python cli.py train PRE_PROCESS_DATASET_PATH
 ```
 To predict the transcription of a *.wav* file the following command should be run where `INPUT_AUDIO_FILE` is the *.wav* file to be converted into the `OUTPUT_MIDI_FILE` 
 ```

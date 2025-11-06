@@ -10,7 +10,7 @@ authors = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.7,<4.0"
+python = ">=3.7,<3.8"
 tensorflow = "1.15.5"
 numpy = "1.18.5"
 click = "^8.0.4"
@@ -20,7 +20,7 @@ tensorflow-directml = {version = "1.15.5", optional = true}
 pydantic = "^1.9.0"
 librosa = "^0.9.1"
 mido = "^1.2.10"
-scipy = "1.6.1."
+scipy = "1.6.1"
 black = "^22.1.0"
 
 [tool.poetry.extras]
